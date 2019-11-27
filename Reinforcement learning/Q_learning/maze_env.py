@@ -5,7 +5,6 @@ Black rectangles:       hells       [reward = -1].
 Yellow bin circle:      paradise    [reward = +1].
 All other states:       ground      [reward = 0].
 This script is the environment part of this example. The RL is in RL_brain.py.
-View more on my tutorial page: https://morvanzhou.github.io/tutorials/
 """
 
 
