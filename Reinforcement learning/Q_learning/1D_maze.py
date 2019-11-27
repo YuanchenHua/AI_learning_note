@@ -14,15 +14,15 @@ ACTIONS = ['left', 'right']     # available actions
 EPSILON = 0.9   # greedy police
 ALPHA = 0.1     # learning rate
 GAMMA = 0.9    # discount factor
-MAX_EPISODES = 50   # maximum episodes
+MAX_EPISODES = 10   # maximum episodes
 FRESH_TIME = 0.001    # fresh time for one move
 
 
-def build_q_table(n_states, actions):
+def build_q_table(n_states, actions,bias = 0):
     k = np.zeros((n_states, len(actions)))
     # 初始化bias的Q表，不影响最后学习成果，但会增加学习时间
     # bias initial Table
-    k[:,0]=2
+    k[:,0]= bias
 
     table = pd.DataFrame(
         k,     # q_table initial values
@@ -35,11 +35,15 @@ def build_q_table(n_states, actions):
 
 def choose_action(state, q_table):
     # This is how to choose an action
+    # 选出整行
     state_actions = q_table.iloc[state, :]
+    # 左右都为0，不分大小的时候，也算随机选
     if (np.random.uniform() > EPSILON) or ((state_actions == 0).all()):  # act non-greedy or state-action have no value
         action_name = np.random.choice(ACTIONS)
     else:   # act greedy
-        action_name = state_actions.idxmax()    # replace argmax to idxmax as argmax means a different function in newer version of pandas
+        # replace argmax to idxmax as argmax means a different function in newer version of pandas
+        action_name = state_actions.idxmax()    
+
     return action_name
 
 
@@ -63,11 +67,12 @@ def get_env_feedback(S, A):
 
 def update_env(S, episode, step_counter):
     # This is how environment be updated
+    # 这里env_list 是个单个字符的list，用到的时候，用join连接起来
     env_list = ['-']*(N_STATES-1) + ['T']   # '---------T' our environment
     if S == 'terminal':
         interaction = 'Episode %s: total_steps = %s' % (episode+1, step_counter)
         print('\r{}'.format(interaction), end='')
-        time.sleep(0.1)
+        time.sleep(1)
         print('\r                                ', end='')
     else:
         env_list[S] = 'o'
@@ -78,7 +83,7 @@ def update_env(S, episode, step_counter):
 
 def rl():
     # main part of RL loop
-    q_table = build_q_table(N_STATES, ACTIONS)
+    q_table = build_q_table(N_STATES, ACTIONS,0 )
     for episode in range(MAX_EPISODES):
         step_counter = 0
         S = 0
@@ -100,6 +105,7 @@ def rl():
 
             update_env(S, episode, step_counter+1)
             step_counter += 1
+            print(q_table)
         print(q_table)
         print(step_counter)
     return q_table
