@@ -5,10 +5,11 @@ All decisions are made in here.
 
 import numpy as np
 import pandas as pd
+np.random.seed(2)
 
 
 class QLearningTable:
-    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
+    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.7):
         self.actions = actions  # a list
         self.lr = learning_rate
         self.gamma = reward_decay
