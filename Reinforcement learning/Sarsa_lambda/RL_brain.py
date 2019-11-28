@@ -92,4 +92,5 @@ class SarsaLambdaTable(RL):
 
         # decay eligibility trace after update
         # 整张eligibility_trace的表，每走一次，就衰变一次
+        # 这里gama是不是不需要乘啊？？？
         self.eligibility_trace *= self.gamma*self.lambda_
