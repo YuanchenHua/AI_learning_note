@@ -15,6 +15,8 @@ from RL_brain import QLearningTable
 def update():
     for episode in range(100):
         # initial observation
+        # 就是agent的坐标，reset()只返回一个参数
+        # 拿到重新开始的初始坐标
         observation = env.reset()
 
         while True:
@@ -25,6 +27,7 @@ def update():
             action = RL.choose_action(str(observation))
 
             # RL take action and get next observation and reward
+            # step()返回三个参数
             observation_, reward, done = env.step(action)
 
             # RL learn from this transition
