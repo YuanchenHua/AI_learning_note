@@ -1,8 +1,6 @@
 """
 This part of code is the Q learning brain, which is a brain of the agent.
 All decisions are made in here.
-
-View more on my tutorial page: https://morvanzhou.github.io/tutorials/
 """
 
 import numpy as np
@@ -83,11 +81,15 @@ class SarsaLambdaTable(RL):
         # self.eligibility_trace.loc[s, a] += 1
 
         # Method 2:
+        # 这种方法会把同一state下，没选的action都变为0，选到的更新为1
         self.eligibility_trace.loc[s, :] *= 0
         self.eligibility_trace.loc[s, a] = 1
 
         # Q update
+        # Qlearning 和 Sarsa都是当前一步更新，但啦，lambda_Sarsa是整张表更新
+        # 那些很久没经历过到的state，eligibility基本衰变到0，因此q表的值，相乘也几乎为0
         self.q_table += self.lr * error * self.eligibility_trace
 
         # decay eligibility trace after update
+        # 整张eligibility_trace的表，每走一次，就衰变一次
         self.eligibility_trace *= self.gamma*self.lambda_

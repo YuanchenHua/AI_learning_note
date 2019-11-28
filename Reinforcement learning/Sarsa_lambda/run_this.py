@@ -12,7 +12,7 @@ from RL_brain import SarsaLambdaTable
 
 
 def update():
-    for episode in range(100):
+    for episode in range(1):
         # initial observation
         observation = env.reset()
 
@@ -42,7 +42,6 @@ def update():
             # break while loop when end of this episode
             if done:
                 break
-
     # end of game
     print('game over')
     env.destroy()
@@ -51,5 +50,5 @@ if __name__ == "__main__":
     env = Maze()
     RL = SarsaLambdaTable(actions=list(range(env.n_actions)))
 
-    env.after(100, update)
+    env.after(1, update)
     env.mainloop()
